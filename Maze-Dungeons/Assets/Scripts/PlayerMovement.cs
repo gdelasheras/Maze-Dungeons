@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
 			anim.SetBool ("isWalking", false);
 		}
 
-        rb.MovePosition(rb.position + v * Time.deltaTime);
+        rb.MovePosition(rb.position + v * Time.deltaTime * 4);
     }
 	
 	void Update () 
