@@ -26,6 +26,14 @@ public class BoardManager : MonoBehaviour {
     [SerializeField]
     private GameObject[] outerWallsTiles;
 
+	public int level;
+
+	[SerializeField]
+	private Text txtlevel;
+
+	[SerializeField]
+	private Text TextoPuntos;
+
 	#endregion
 
 	#region Atributos no serializables
@@ -319,12 +327,16 @@ public class BoardManager : MonoBehaviour {
 	/// <param name="level">Número del nivel en el que se encuentra el jugador.</param>
     public void SetUpScene(int level)
     {
-		this.remainingBeepers = level;
-        this.columns = level * 5;
-        this.rows = level * 5;
+		Debug.Log ("level: sdsd " + level);
+		Debug.Log ("this.level:  " + this.level);
+		this.level = level;
+		this.txtlevel.text = "Nivel " + (this.level); 
+		this.remainingBeepers = level * 5;
+		this.columns = (level % 2 == 0) ? level + 25 : level + 25 + 1;
+		this.rows = (level % 2 == 0) ? level + 25 : level + 25 + 1;
         PrepareMazeMap ();
 		GeneratePaths ();
-		PlaceBeepers (level);
+		PlaceBeepers (level * 10);
 		PrintMaze ();
     }
 
@@ -334,6 +346,8 @@ public class BoardManager : MonoBehaviour {
 	/// <param name="level">Número del nivel en el que se encuentra el jugador.</param>
 	private void PlaceBeepers(int level)
 	{
+
+		TextoPuntos.text = "Objetos por recoger: " + level;
 		GameObject beeper;
 		for (int i = 0; i < level; i++)
 		{

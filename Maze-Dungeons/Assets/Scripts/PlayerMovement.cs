@@ -14,12 +14,17 @@ public class PlayerMovement : MonoBehaviour
 	private bool walking = false;
 	[SerializeField]
 	private Text TextoPuntos;
-	private int remainingBeepers = 5;
+	[SerializeField]
+	private BoardManager boardmanager;
+	private int remainingBeepers;
+	[SerializeField]
+	private Timer timer;
 
     void Start ()
     {
 		anim = GetComponent<Animator>();
 		rb = GetComponent<Rigidbody2D> ();
+		remainingBeepers = boardmanager.level * 10;
 	}
 
     public void Move(Vector2 v)
@@ -64,26 +69,16 @@ public class PlayerMovement : MonoBehaviour
 			Destroy (collider.gameObject);
 			if (remainingBeepers == 1)
 			{
-				TextoPuntos.text = "Has ganado!";
+				TextoPuntos.text = "Has ganado!!";
 			}
 			else
 			{
 				remainingBeepers--;
-				TextoPuntos.text = "Quedan " + remainingBeepers + " pulsadores por recoger";
+				TextoPuntos.text = "Objetos por recoger: " + remainingBeepers;
 			}
 		}
 
 	}
-
-    void OnCollisionStay2D(Collision2D collisionInfo)
-    {
-
-    }
-
-    void OnCollisionExit2D(Collision2D collisionInfo)
-    {
-		
-    }
 
     private void checkAttack()
     {
