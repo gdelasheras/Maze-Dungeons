@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Timer : MonoBehaviour 
@@ -33,12 +31,12 @@ public class Timer : MonoBehaviour
 		}
 	}
 
-	string getTime()
+	public string getTime()
 	{
 		return textoCronometro.text;
 	}
 
-	void stop()
+    public void stop()
 	{
 		fin = true;
 	}

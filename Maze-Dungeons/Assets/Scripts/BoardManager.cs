@@ -41,9 +41,6 @@ public class BoardManager : MonoBehaviour {
     public int level;
 
 	[SerializeField]
-	private Text txtlevel;
-
-	[SerializeField]
 	private Text TextoPuntos;
 
 	#endregion
@@ -429,7 +426,6 @@ public class BoardManager : MonoBehaviour {
 		Debug.Log ("level: sdsd " + level);
 		Debug.Log ("this.level:  " + this.level);
 		this.level = level;
-		this.txtlevel.text = "Nivel " + (this.level); 
 		this.remainingBeepers = level * 5;
 		this.columns = (level % 2 == 0) ? level + 25 : level + 25 + 1;
 		this.rows = (level % 2 == 0) ? level + 25 : level + 25 + 1;
@@ -483,8 +479,8 @@ public class BoardManager : MonoBehaviour {
 			Box box =  beepers[Random.Range (0, beepers.Count - 1)];
 			beeper = Instantiate (exit, 
 				new Vector3((float) box.x - 0.16f, (float) box.y - 0.16f, 0f), Quaternion.identity) as GameObject;
-            beeper = Instantiate(beeperMinimap,
-                new Vector3((float)box.x - 0.16f, (float)box.y - 0.16f, -106f), Quaternion.identity) as GameObject;
+            //beeper = Instantiate(beeperMinimap,
+            //    new Vector3((float)box.x - 0.16f, (float)box.y - 0.16f, -106f), Quaternion.identity) as GameObject;
         }
 	}
 }

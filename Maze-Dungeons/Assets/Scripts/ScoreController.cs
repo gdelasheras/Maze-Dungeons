@@ -13,7 +13,6 @@ public class ScoreController : MonoBehaviour
 	public Button btnEmpezar;
 	public Button btnScores;
 	public Button btnVolver;
-
 	public string result = "";
 
 	void Start()
@@ -56,7 +55,7 @@ public class ScoreController : MonoBehaviour
 		case JSONObject.Type.ARRAY:
 			foreach(JSONObject j in obj.list)
 			{
-				result += accessData(j);
+				result += accessData(j) + "\n";
 			}
 
 			break;
@@ -98,5 +97,5 @@ public class ScoreController : MonoBehaviour
 		puntuaciones.text = this.result;
 		puntuaciones.gameObject.SetActive (false);
 		btnVolver.gameObject.SetActive (false);
-	}
+    }
 }

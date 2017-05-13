@@ -9,10 +9,11 @@ public class GameMenu : MonoBehaviour
     public static bool setPause;
 	public string addScoreURL = "http://maze-dungeons.esy.es/post_scores.php?";
 
-    private GameMenu()
-    {
-        
-    }
+    public GameObject scoreTree, pauseTree;
+    public UnityEngine.UI.InputField inputText;
+    private string time = "";
+
+    private GameMenu() {    }
 
     public static GameMenu GetInstance()
     {
@@ -26,32 +27,47 @@ public class GameMenu : MonoBehaviour
 
     public GameObject PausePanel;
 
+    /// <summary>
+    /// Método para pausar el juego en la escena del laberinto.
+    /// </summary>
     public void Pause()
     {
         PausePanel.SetActive(true);
+        scoreTree.SetActive(false);
+        pauseTree.SetActive(true);
         setPause = true;
         Time.timeScale = 0;
     }
 
+    /// <summary>
+    /// Método para despausar el juego.
+    /// </summary>
     public void Continue()
     {
         PausePanel.SetActive(false);
+        scoreTree.SetActive(false);
+        pauseTree.SetActive(false);
         setPause = false;
         Time.timeScale = 1;
     }
 
+    /// <summary>
+    /// Método para salir del juego.
+    /// </summary>
     public void Salir()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// Método para reiniciar la escena del laberinto.
+    /// </summary>
     public void Restart()
     {
         SceneManager.LoadScene("Maze");
         Time.timeScale = 1;
         setPause = false;
     }
-
 
 	// Use this for initialization
 	void Start ()
@@ -73,10 +89,19 @@ public class GameMenu : MonoBehaviour
         }
     }
 
-	public void guardar()
+    public void menuFinPartida(string time)
+    {
+        Pause();
+        scoreTree.SetActive(true);
+        pauseTree.SetActive(false);
+        this.time = time;
+    }
+
+    public void guardar()
 	{
-		StartCoroutine(PostScores("pato", "00:00"));
-	}
+		StartCoroutine(PostScores(inputText.text, time));
+        Application.LoadLevel("Main_Menu");
+    }
 
 	public IEnumerator PostScores(string name, string time)
 	{
@@ -84,8 +109,8 @@ public class GameMenu : MonoBehaviour
 
 		string post_url = addScoreURL + "time=" + time + "&name=" + name + "&date=" + date;
 
-		// Post the URL to the site and create a download object to get the result.
-		WWW hs_post = new WWW(post_url);
+        // Post the URL to the site and create a download object to get the result.
+        WWW hs_post = new WWW(post_url);
 		yield return hs_post; // Wait until the download is done
 
 		if (hs_post.error != null)
