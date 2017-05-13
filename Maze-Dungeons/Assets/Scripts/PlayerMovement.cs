@@ -20,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField]
 	private Timer timer;
 
+	public GameMenu menu;
+
+
+
     void Start ()
     {
 		anim = GetComponent<Animator>();
@@ -70,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
 			if (remainingBeepers == 1)
 			{
 				TextoPuntos.text = "Has ganado!!";
+
 			}
 			else
 			{
@@ -104,5 +109,7 @@ public class PlayerMovement : MonoBehaviour
 		
 		//anim.Play ("attacking");
 	}
+
+
 
 }

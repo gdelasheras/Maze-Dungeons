@@ -14,9 +14,12 @@ public class BoardManager : MonoBehaviour {
     [SerializeField]
     private GameObject exit;
 
-	/// <summary>
-	/// Casillas del suelo.
-	/// </summary>
+    [SerializeField]
+    private GameObject beeperMinimap;
+
+    /// <summary>
+    /// Casillas del suelo.
+    /// </summary>
     [SerializeField]
     private GameObject[] floorTiles;
 
@@ -26,7 +29,16 @@ public class BoardManager : MonoBehaviour {
     [SerializeField]
     private GameObject[] outerWallsTiles;
 
-	public int level;
+	[SerializeField]
+	private GameObject[] insideHorizontalWallsTiles;
+
+    [SerializeField]
+    private GameObject[] upWallsTiles;
+
+    [SerializeField]
+    private GameObject[] minimapWallsTiles;
+
+    public int level;
 
 	[SerializeField]
 	private Text txtlevel;
@@ -83,6 +95,7 @@ public class BoardManager : MonoBehaviour {
     public class Box
 	{
 		public bool isWall;
+        public bool isWall2;
 		public bool isPath;
 		public bool isRightPath;
 		public bool isEnd;
@@ -273,10 +286,28 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// Instancia el laberinto en la escena del juego.
-	/// </summary>
-	private void PrintMaze()
+    /// <summary>
+    /// Cambia el estilo de pared para que sean mejores visualmente
+    /// </summary>
+    private void GenerateWallUp()
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 1; j < columns; j++)
+            {
+                if (mazeMap[i][j].isWall == true && (mazeMap[i][j - 1].isWall == true || mazeMap[i][j - 1].isWall2 == true))
+                {
+                    mazeMap[i][j].isWall2 = true;
+                    mazeMap[i][j].isWall = false;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Instancia el laberinto en la escena del juego.
+    /// </summary>
+    private void PrintMaze()
 	{
 		GameObject instance = null;
 
@@ -293,14 +324,25 @@ public class BoardManager : MonoBehaviour {
 				x = System.Math.Round(x, 2);
 				y = System.Math.Round(y, 2);
                 
-				if (mazeMap[i][j].isWall)
+				if (i == 0 || j == 0 || i == rows - 1 || j == columns - 1) 
 				{
-					toInstantiate = outerWallsTiles[Random.Range(0, outerWallsTiles.Length)];
-
+					toInstantiate = outerWallsTiles[0];
+					instance = Instantiate(toInstantiate, new Vector3((float)x, (float)y, 0f), Quaternion.identity) as GameObject;
+					instance.transform.SetParent(boardHolder);
+				}
+				else if (mazeMap[i][j].isWall)
+				{
+					toInstantiate = insideHorizontalWallsTiles[Random.Range(0, insideHorizontalWallsTiles.Length)];
 					instance = Instantiate(toInstantiate, new Vector3((float) (x), (float) (y), 0f), Quaternion.identity) as GameObject;
 					instance.transform.SetParent(boardHolder);
 				}
-				else if (mazeMap[i][j].isRightPath)
+                else if (mazeMap[i][j].isWall2)
+                {
+                    toInstantiate = upWallsTiles[Random.Range(0, upWallsTiles.Length)];
+                    instance = Instantiate(toInstantiate, new Vector3((float)(x), (float)(y), 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                }
+                else if (mazeMap[i][j].isRightPath)
 				{
 					// Floor
 					instance = Instantiate(toInstantiate, new Vector3((float) x, (float) y, 0f), Quaternion.identity) as GameObject;
@@ -319,12 +361,69 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	#endregion
+    /// <summary>
+    /// Instancia el minimapa en la escena del juego.
+    /// </summary>
+    private void PrintMinimap()
+    {
+        GameObject instance = null;
 
-	/// <summary>
-	/// Genera la escena de un laberinto en un nivel concreto.
-	/// </summary>
-	/// <param name="level">Número del nivel en el que se encuentra el jugador.</param>
+        double x = -2.56;
+        double y = -2.56;
+
+        boardHolder = new GameObject("Board").transform;
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+                x = System.Math.Round(x, 2);
+                y = System.Math.Round(y, 2);
+
+				if (i == 0 || j == 0 || i == rows - 1 || j == columns - 1) 
+				{
+					toInstantiate = outerWallsTiles[0];
+					instance = Instantiate(toInstantiate, new Vector3((float)x, (float)y, -100f), Quaternion.identity) as GameObject;
+					instance.transform.SetParent(boardHolder);
+				}
+                else if (mazeMap[i][j].isWall)
+                {
+                    toInstantiate = minimapWallsTiles[0];
+                    instance = Instantiate(toInstantiate, new Vector3((float)(x), (float)(y), -100f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                }
+                else if (mazeMap[i][j].isWall2)
+                {
+                    toInstantiate = minimapWallsTiles[0];
+                    instance = Instantiate(toInstantiate, new Vector3((float)(x), (float)(y), -100f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                }
+                else if (mazeMap[i][j].isRightPath)
+                {
+                    // Floor
+                    instance = Instantiate(toInstantiate, new Vector3((float)x, (float)y, -100f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                }
+                else
+                {
+                    // Floor
+                    instance = Instantiate(toInstantiate, new Vector3((float)x, (float)y, -100f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                }
+                y += 2.56;
+            }
+            y = -2.56;
+            x += 2.56;
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Genera la escena de un laberinto en un nivel concreto.
+    /// </summary>
+    /// <param name="level">Número del nivel en el que se encuentra el jugador.</param>
     public void SetUpScene(int level)
     {
 		Debug.Log ("level: sdsd " + level);
@@ -337,8 +436,38 @@ public class BoardManager : MonoBehaviour {
         PrepareMazeMap ();
 		GeneratePaths ();
 		PlaceBeepers (level * 10);
+        GenerateWallUp();
 		PrintMaze ();
+		PlaceLavaTiles ();
+        PrintMinimap();
     }
+
+	private void PlaceLavaTiles()
+	{
+		GameObject instance = null;
+
+		double x = -25.6;
+		double y = -25.6;
+
+		boardHolder = new GameObject("Board").transform;
+		
+		while(y < -2.56)
+		{
+			for (int j = 0; j < columns*1.5; j++) 
+			{
+				GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+				x = System.Math.Round(x, 2);
+				y = System.Math.Round(y, 2);
+
+				toInstantiate = outerWallsTiles[0];
+				instance = Instantiate(toInstantiate, new Vector3((float)x, (float)y, 0f), Quaternion.identity) as GameObject;
+				instance.transform.SetParent(boardHolder);
+				x += 2.56;
+			}
+			y += 2.56;
+			x = -25.6;
+		}
+	}
 
 	/// <summary>
 	/// Coloca en el mapa los objetos a recoger.
@@ -354,6 +483,8 @@ public class BoardManager : MonoBehaviour {
 			Box box =  beepers[Random.Range (0, beepers.Count - 1)];
 			beeper = Instantiate (exit, 
 				new Vector3((float) box.x - 0.16f, (float) box.y - 0.16f, 0f), Quaternion.identity) as GameObject;
-		}
+            beeper = Instantiate(beeperMinimap,
+                new Vector3((float)box.x - 0.16f, (float)box.y - 0.16f, -106f), Quaternion.identity) as GameObject;
+        }
 	}
 }

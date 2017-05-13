@@ -32,4 +32,14 @@ public class Timer : MonoBehaviour
 			textoCronometro.text = minutos + ":" + segundos;			
 		}
 	}
+
+	string getTime()
+	{
+		return textoCronometro.text;
+	}
+
+	void stop()
+	{
+		fin = true;
+	}
 }
