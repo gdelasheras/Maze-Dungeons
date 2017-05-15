@@ -10,6 +10,8 @@ public class Timer : MonoBehaviour
 
 	private bool fin;
 
+	private int restar = 0;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -31,13 +33,28 @@ public class Timer : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Devuelve el tiempo en formato string.
+	/// </summary>
+	/// <returns>Devuelve el tiempo en formato string.</returns>
 	public string getTime()
 	{
 		return textoCronometro.text;
 	}
 
+	/// <summary>
+	/// Para el cronómetro.
+	/// </summary>
     public void stop()
 	{
 		fin = true;
+	}
+
+	/// <summary>
+	/// Reduce el tiempo en 20 segundos.
+	/// </summary>
+	public void minus20()
+	{
+		tiempoInicio += 20;
 	}
 }

@@ -15,7 +15,9 @@ public class BoardManager : MonoBehaviour {
     private GameObject exit;
 
     [SerializeField]
-    private GameObject beeperMinimap;
+    private GameObject timeLess;
+
+	public GameObject horizontal;
 
     /// <summary>
     /// Casillas del suelo.
@@ -423,8 +425,6 @@ public class BoardManager : MonoBehaviour {
     /// <param name="level">Número del nivel en el que se encuentra el jugador.</param>
     public void SetUpScene(int level)
     {
-		Debug.Log ("level: sdsd " + level);
-		Debug.Log ("this.level:  " + this.level);
 		this.level = level;
 		this.remainingBeepers = level * 5;
 		this.columns = (level % 2 == 0) ? level + 25 : level + 25 + 1;
@@ -434,53 +434,48 @@ public class BoardManager : MonoBehaviour {
 		PlaceBeepers (level * 10);
         GenerateWallUp();
 		PrintMaze ();
-		PlaceLavaTiles ();
+		GameObject instance = Instantiate(horizontal, new Vector3((float) -25.6, (float) -25.6, 10f), Quaternion.identity) as GameObject;
         PrintMinimap();
     }
 
-	private void PlaceLavaTiles()
-	{
-		GameObject instance = null;
-
-		double x = -25.6;
-		double y = -25.6;
-
-		boardHolder = new GameObject("Board").transform;
-		
-		while(y < -2.56)
-		{
-			for (int j = 0; j < columns*1.5; j++) 
-			{
-				GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
-				x = System.Math.Round(x, 2);
-				y = System.Math.Round(y, 2);
-
-				toInstantiate = outerWallsTiles[0];
-				instance = Instantiate(toInstantiate, new Vector3((float)x, (float)y, 0f), Quaternion.identity) as GameObject;
-				instance.transform.SetParent(boardHolder);
-				x += 2.56;
-			}
-			y += 2.56;
-			x = -25.6;
-		}
-	}
-
 	/// <summary>
-	/// Coloca en el mapa los objetos a recoger.
+	/// Coloca en el mapa los objetos recogibles
 	/// </summary>
 	/// <param name="level">Número del nivel en el que se encuentra el jugador.</param>
 	private void PlaceBeepers(int level)
 	{
+		placeBeepers(10);
+		placeTimeLessBeepers(3);
+	}
 
-		TextoPuntos.text = "Objetos por recoger: " + level;
+	/// <summary>
+	/// Coloca en el mapa los objetos a recoger obligatoriamente.
+	/// </summary>
+	/// <param name="number">Número de objetos a colocar.</param>
+	private void placeBeepers(int number)
+	{
+		TextoPuntos.text = "Objetos por recoger: " + number;
 		GameObject beeper;
-		for (int i = 0; i < level; i++)
+		for (int i = 0; i < number; i++)
 		{
 			Box box =  beepers[Random.Range (0, beepers.Count - 1)];
 			beeper = Instantiate (exit, 
-				new Vector3((float) box.x - 0.16f, (float) box.y - 0.16f, 0f), Quaternion.identity) as GameObject;
-            //beeper = Instantiate(beeperMinimap,
-            //    new Vector3((float)box.x - 0.16f, (float)box.y - 0.16f, -106f), Quaternion.identity) as GameObject;
-        }
+				new Vector3((float) box.x, (float) box.y, 0f), Quaternion.identity) as GameObject;
+		}
+	}
+
+	/// <summary>
+	/// Coloca en el mapa los objetos que reducen el tiempo.
+	/// </summary>
+	/// <param name="number">Número de objetos a colocar.</param>
+	private void placeTimeLessBeepers(int number)
+	{
+		GameObject beeper;
+		for (int i = 0; i < number; i++)
+		{
+			Box box = beepers[Random.Range (0, beepers.Count - 1)];
+			beeper = Instantiate(timeLess,
+				new Vector3((float)box.x, (float)box.y, 0f), Quaternion.identity) as GameObject;
+		}
 	}
 }

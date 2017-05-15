@@ -1,0 +1,27 @@
+<linker>
+	<assembly fullname="Assembly-CSharp">
+		<type fullname="ScoreController">
+			<method name="ocultar"/>
+			<method name="mostrarScores"/>
+		</type>
+		<type fullname="MainMenu">
+			<method name="newGame"/>
+		</type>
+		<type fullname="TouchController">
+			<method name="Unpress"/>
+			<method name="RightArrow"/>
+			<method name="Unpress"/>
+			<method name="LeftArrow"/>
+			<method name="Unpress"/>
+			<method name="UpArrow"/>
+			<method name="Unpress"/>
+			<method name="DownArrow"/>
+		</type>
+		<type fullname="GameMenu">
+			<method name="Continue"/>
+			<method name="guardar"/>
+			<method name="Restart"/>
+			<method name="Salir"/>
+		</type>
+	</assembly>
+</linker>

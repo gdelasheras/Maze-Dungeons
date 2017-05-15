@@ -76,8 +76,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (collider.gameObject.tag == "beeper")
         {
-			Destroy (collider.gameObject);
-			if (remainingBeepers == 8)
+			if (remainingBeepers == 1)
 			{
 				TextoPuntos.text = "Has ganado!!";
                 timer.stop();
@@ -89,6 +88,11 @@ public class PlayerMovement : MonoBehaviour
 				TextoPuntos.text = "Objetos por recoger: " + remainingBeepers;
 			}
 		}
+		else if (collider.gameObject.tag == "timeLess")
+		{
+			timer.minus20 ();
+		}
+		Destroy (collider.gameObject);
 	}
 
     private void checkAttack()
