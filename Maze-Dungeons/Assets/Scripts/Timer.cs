@@ -10,8 +10,6 @@ public class Timer : MonoBehaviour
 
 	private bool fin;
 
-	private int restar = 0;
-
 	// Use this for initialization
 	void Start () 
 	{

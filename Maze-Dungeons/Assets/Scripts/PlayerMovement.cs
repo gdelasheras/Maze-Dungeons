@@ -114,7 +114,6 @@ public class PlayerMovement : MonoBehaviour
 
 	public void PerformOneAttack()
 	{
-		
 		Move (new Vector2(5, 0));
 		
 		//anim.Play ("attacking");
