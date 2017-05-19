@@ -6,23 +6,30 @@ public class TouchController : MonoBehaviour {
 
 	private PlayerMovement moviPlayer;
     private Vector2 v;
+    public GameObject mobileControls;
 
     // Use this for initialization
     void Start () {
 		moviPlayer = FindObjectOfType<PlayerMovement>();
-	}
-	
-	// Update is called once per frame
-	void Update () 
+
+        #if UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX
+        
+        mobileControls.SetActive(false);
+
+        #endif
+    }
+
+    // Update is called once per frame
+    void Update () 
 	{
-		#if UNITY_IOS
+        #if UNITY_IOS || UNITY_ANDROID
 
     	moviPlayer.Move(v);
 
-		#endif
+        #endif
     }
 
-	// Left button
+    // Left button
     public void LeftArrow()
     {       
         v = new Vector2(-1, 0);

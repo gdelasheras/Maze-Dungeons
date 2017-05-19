@@ -8,18 +8,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
 	private float playerMov;
 
-	// No serializable attributes
-	private Animator anim;
+    [SerializeField]
+    private Timer timer;
+
+    [SerializeField]
+    private Text TextoPuntos;
+
+    [SerializeField]
+    private BoardManager boardmanager;
+
+    [SerializeField]
+    private GameMenu menu;
+
+    // No serializable attributes
+    private Animator anim;
 	private Rigidbody2D rb;
 	private bool walking = false;
-	[SerializeField]
-	private Text TextoPuntos;
-	[SerializeField]
-	private BoardManager boardmanager;
 	private int remainingBeepers;
-	[SerializeField]
-	private Timer timer;
 
+    /// <summary>
+    /// Método que se ejecuta cuando se inicia el script.
+    /// </summary>
     void Start ()
     {
 		anim = GetComponent<Animator>();
@@ -52,8 +61,6 @@ public class PlayerMovement : MonoBehaviour
 		Move (v);
 
 		#endif
-
-		//checkAttack ();
     }
 
     void OnCollisionEnter2D(Collision2D collisionInfo)
@@ -61,15 +68,19 @@ public class PlayerMovement : MonoBehaviour
 		walking = false;
     }
 
-
+    /// <summary>
+    /// Método que detecta el colisionado con otro objeto.
+    /// </summary>
+    /// <param name="collider">Objeto contra el que se ha colisionado.</param>
 	public void OnTriggerEnter2D(Collider2D collider)
 	{
-		if (collider.gameObject.tag == "beeper") {
-			Debug.Log ("Beeper");
-			Destroy (collider.gameObject);
+		if (collider.gameObject.tag == "beeper")
+        {
 			if (remainingBeepers == 1)
 			{
 				TextoPuntos.text = "Has ganado!!";
+                timer.stop();
+                menu.menuFinPartida(timer.getTime());
 			}
 			else
 			{
@@ -77,7 +88,11 @@ public class PlayerMovement : MonoBehaviour
 				TextoPuntos.text = "Objetos por recoger: " + remainingBeepers;
 			}
 		}
-
+		else if (collider.gameObject.tag == "timeLess")
+		{
+			timer.minus20 ();
+		}
+		Destroy (collider.gameObject);
 	}
 
     private void checkAttack()
@@ -104,5 +119,4 @@ public class PlayerMovement : MonoBehaviour
 		
 		//anim.Play ("attacking");
 	}
-
 }
